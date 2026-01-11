@@ -1,0 +1,23 @@
+{
+  "name": "ai-appointment-backend",
+  "version": "1.0.0",
+  "description": "Deterministic appointment parsing pipeline (no LLMs)",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "chrono-node": "^2.3.2",
+    "compromise": "^14.0.0",
+    "express": "^4.18.2",
+    "luxon": "^3.3.0",
+    "serverless-http": "^4.0.0",
+    "tesseract.js": "^4.1.1",
+    "zod": "^3.21.4"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}
