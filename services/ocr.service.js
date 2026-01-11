@@ -20,9 +20,10 @@ async function extractText(input) {
     return { raw_text: '', confidence: 0 };
   }
 
+  // Use Tesseract.recognize directly with a CDN-hosted corePath to avoid relying on local WASM files
+  const corePath = process.env.TESSERACT_CORE_PATH || 'https://cdn.jsdelivr.net/npm/tesseract.js-core@2.1.1/tesseract-core-simd.wasm';
   try {
-    const { data } = await Tesseract.recognize(buffer, 'eng', { logger: () => {} });
-
+    const { data } = await Tesseract.recognize(buffer, 'eng', { corePath, logger: () => {} });
     const raw = data && data.text ? data.text : '';
     const cleaned = cleanText(raw);
 

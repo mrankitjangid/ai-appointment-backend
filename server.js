@@ -17,7 +17,7 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 3000;
 
-if (process.env.NODE_ENV !== 'vercel') {
+if (process.env.NODE_ENV === 'vercel') {
 	module.exports = serverless(app);
 } else {
 	app.listen(PORT, () => {
