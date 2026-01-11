@@ -1,9 +1,8 @@
 const { z } = require('zod');
 
 const inputSchema = z.object({
-  text: z.string().optional(),
-  image_base64: z.string().optional()
-}).refine(data => data.text || data.image_base64, { message: 'Either text or image_base64 must be provided' });
+  text: z.string().optional()
+});
 
 const finalAppointmentSchema = z.object({
   appointment: z.object({

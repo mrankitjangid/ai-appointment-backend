@@ -7,12 +7,17 @@ const { computeFinalConfidence } = require('../utils/confidence');
 
 async function parseAppointment(req, res) {
   try {
-    const parseResult = inputSchema.safeParse(req.body);
-    if (!parseResult.success) {
-      return res.status(400).json({ status: 'error', message: 'Invalid input', issues: parseResult.error.errors });
+    // If a multipart file was uploaded, prefer that over body input
+    let input = null;
+    if (req.file && req.file.buffer) {
+      input = { file: req.file.buffer };
+    } else {
+      const parseResult = inputSchema.safeParse(req.body);
+      if (!parseResult.success) {
+        return res.status(400).json({ status: 'error', message: 'Invalid input', issues: parseResult.error.errors });
+      }
+      input = parseResult.data;
     }
-
-    const input = parseResult.data;
 
     // Step 1: OCR / Text Extraction
     const ocrOut = await ocrService.extractText(input);

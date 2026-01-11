@@ -1,24 +1,27 @@
-const { createWorker } = require('tesseract.js');
+const Tesseract = require('tesseract.js');
 const { cleanText } = require('../utils/textCleaner');
 
 async function extractText(input) {
+  // text input
   if (input.text) {
     const cleaned = cleanText(input.text);
     return { raw_text: cleaned, confidence: 0.95 };
   }
 
-  if (!input.image_base64) {
+  // file buffer input (from multer memory storage)
+  let buffer = null;
+  if (input.file && Buffer.isBuffer(input.file)) {
+    buffer = input.file;
+  } else if (input.image_base64) {
+    buffer = Buffer.from(input.image_base64, 'base64');
+  }
+
+  if (!buffer) {
     return { raw_text: '', confidence: 0 };
   }
 
   try {
-    const buffer = Buffer.from(input.image_base64, 'base64');
-    const worker = createWorker({ logger: () => {} });
-    await worker.load();
-    await worker.loadLanguage('eng');
-    await worker.initialize('eng');
-    const { data } = await worker.recognize(buffer);
-    await worker.terminate();
+    const { data } = await Tesseract.recognize(buffer, 'eng', { logger: () => {} });
 
     const raw = data && data.text ? data.text : '';
     const cleaned = cleanText(raw);
