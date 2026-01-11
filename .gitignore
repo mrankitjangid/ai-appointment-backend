@@ -51,3 +51,4 @@ Thumbs.db
 *.tgz
 *.local
 .vercel
+eng.traineddata
